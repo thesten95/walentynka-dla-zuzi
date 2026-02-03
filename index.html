@@ -11,10 +11,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Arial', sans-serif;
+        font-family: Arial, sans-serif;
         overflow: hidden;
         color: white;
         text-align: center;
+    }
+
+    #container {
+        z-index: 2;
     }
 
     h1 {
@@ -63,22 +67,52 @@
         min-height: 40px;
     }
 
+    .floating-text {
+        font-size: 3rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-25px); }
+        100% { transform: translateY(0); }
+    }
+
+    .final-text {
+        font-size: 2.5rem;
+        margin-top: 30px;
+        animation: fadeIn 2s forwards;
+        opacity: 0;
+    }
+
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
+
     .firework {
         position: absolute;
         width: 6px;
         height: 6px;
-        background: white;
         border-radius: 50%;
         animation: explode 1s ease-out forwards;
     }
 
     @keyframes explode {
-        from {
-            transform: scale(1);
-            opacity: 1;
-        }
+        from { transform: scale(1); opacity: 1; }
+        to { transform: scale(20); opacity: 0; }
+    }
+
+    .heart {
+        position: absolute;
+        top: -20px;
+        font-size: 24px;
+        animation: fall linear forwards;
+        opacity: 0.8;
+    }
+
+    @keyframes fall {
         to {
-            transform: scale(20);
+            transform: translateY(110vh);
             opacity: 0;
         }
     }
@@ -86,7 +120,7 @@
 </head>
 <body>
 
-<div>
+<div id="container">
     <h1>Zuza, zostaniesz moją walentynką? ❤️</h1>
     <div class="buttons">
         <button id="yes">Tak</button>
@@ -96,19 +130,28 @@
 </div>
 
 <script>
-    let yesClicks = 0;
     let noClicks = 0;
+    let heartInterval;
 
+    const container = document.getElementById("container");
     const message = document.getElementById("message");
 
     document.getElementById("yes").addEventListener("click", () => {
-        yesClicks++;
-        if (yesClicks === 1) {
-            message.textContent = "A może jednak? 😏";
-        } else {
-            launchFireworks();
-            message.textContent = "❤️❤️❤️";
-        }
+        container.innerHTML = `
+            <div class="floating-text">No ja myślę 😎❤️</div>
+        `;
+
+        startFireworks();
+        startHearts();
+
+        setTimeout(() => {
+            const finalText = document.createElement("div");
+            finalText.className = "final-text";
+            finalText.textContent =
+                "Zuzia i Michał po raz kolejny razem na walentynki, hurra!";
+            container.appendChild(finalText);
+            clearInterval(heartInterval);
+        }, 5000);
     });
 
     document.getElementById("no").addEventListener("click", () => {
@@ -120,17 +163,35 @@
         }
     });
 
-    function launchFireworks() {
-        for (let i = 0; i < 20; i++) {
-            const firework = document.createElement("div");
-            firework.classList.add("firework");
-            firework.style.left = Math.random() * window.innerWidth + "px";
-            firework.style.top = Math.random() * window.innerHeight + "px";
-            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
-            document.body.appendChild(firework);
+    function startFireworks() {
+        const interval = setInterval(() => {
+            for (let i = 0; i < 12; i++) {
+                const firework = document.createElement("div");
+                firework.classList.add("firework");
+                firework.style.left = Math.random() * window.innerWidth + "px";
+                firework.style.top = Math.random() * window.innerHeight + "px";
+                firework.style.backgroundColor =
+                    `hsl(${Math.random() * 360}, 100%, 70%)`;
+                document.body.appendChild(firework);
+                setTimeout(() => firework.remove(), 1000);
+            }
+        }, 600);
 
-            setTimeout(() => firework.remove(), 1000);
-        }
+        setTimeout(() => clearInterval(interval), 5000);
+    }
+
+    function startHearts() {
+        heartInterval = setInterval(() => {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.textContent = "❤️";
+            heart.style.left = Math.random() * window.innerWidth + "px";
+            heart.style.animationDuration = (6 + Math.random() * 4) + "s";
+            heart.style.fontSize = (16 + Math.random() * 24) + "px";
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 10000);
+        }, 400);
     }
 </script>
 
