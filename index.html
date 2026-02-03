@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Walentynka dla Zuzi ❤️</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #ff5f9e, #ffc371);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Arial', sans-serif;
+        overflow: hidden;
+        color: white;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: 30px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .buttons {
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+    }
+
+    button {
+        padding: 15px 35px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    #yes {
+        background-color: #ff2e63;
+        color: white;
+    }
+
+    #no {
+        background-color: #252a34;
+        color: white;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+    }
+
+    .message {
+        margin-top: 25px;
+        font-size: 1.4rem;
+        min-height: 40px;
+    }
+
+    .firework {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+        from {
+            transform: scale(1);
+            opacity: 1;
+        }
+        to {
+            transform: scale(20);
+            opacity: 0;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div>
+    <h1>Zuza, zostaniesz moją walentynką? ❤️</h1>
+    <div class="buttons">
+        <button id="yes">Tak</button>
+        <button id="no">Nie</button>
+    </div>
+    <div class="message" id="message"></div>
+</div>
+
+<script>
+    let yesClicks = 0;
+    let noClicks = 0;
+
+    const message = document.getElementById("message");
+
+    document.getElementById("yes").addEventListener("click", () => {
+        yesClicks++;
+        if (yesClicks === 1) {
+            message.textContent = "A może jednak? 😏";
+        } else {
+            launchFireworks();
+            message.textContent = "❤️❤️❤️";
+        }
+    });
+
+    document.getElementById("no").addEventListener("click", () => {
+        noClicks++;
+        if (noClicks === 1) {
+            message.textContent = "A może jednak? 🥺";
+        } else {
+            message.textContent = "Smuteczek 😢";
+        }
+    });
+
+    function launchFireworks() {
+        for (let i = 0; i < 20; i++) {
+            const firework = document.createElement("div");
+            firework.classList.add("firework");
+            firework.style.left = Math.random() * window.innerWidth + "px";
+            firework.style.top = Math.random() * window.innerHeight + "px";
+            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            document.body.appendChild(firework);
+
+            setTimeout(() => firework.remove(), 1000);
+        }
+    }
+</script>
+
+</body>
+</html>
